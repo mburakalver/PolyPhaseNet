@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "polyphasenet"
+version = "1.0.0"
+description = "Physics-Informed Deep Learning for 2D Non-Separable SAR Autofocus (IEEE TAES)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Muhammed Burak Alver", email = "burakalver@maltepe.edu.tr"}
+]
+keywords = [
+    "synthetic aperture radar",
+    "sar autofocus",
+    "phase gradient",
+    "b-spline",
+    "deep learning",
+    "inverse problems",
+    "test-time adaptation"
+]
+dependencies = [
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "scikit-image>=0.20.0",
+    "matplotlib>=3.7.0",
+    "tqdm>=4.65.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/mburakalver/PolyPhaseNet"
+Paper = "https://ieee-aess.org/publication/transactions-aerospace-and-electronic-systems"

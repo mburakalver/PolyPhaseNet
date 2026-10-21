@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software or results in your research, please cite our paper."
+authors:
+  - family-names: "Alver"
+    given-names: "Muhammed Burak"
+    orcid: "https://orcid.org/0000-0002-3904-743X"
+    affiliation: "Department of Computer Engineering, Maltepe University, Istanbul, Turkey"
+title: "PolyPhaseNet: Phase Gradient-Based Deep Learning for 2D Non-Separable SAR Autofocus"
+version: "1.0.0"
+date-released: "2026-10-17"
+url: "https://github.com/mburakalver/PolyPhaseNet"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Alver"
+      given-names: "Muhammed Burak"
+      orcid: "https://orcid.org/0000-0002-3904-743X"
+  title: "Phase Gradient-Based Deep Learning for 2D Non-Separable SAR Autofocus"
+  journal: "IEEE Transactions on Aerospace and Electronic Systems"
+  year: 2026
+  status: "under-review"
+  notes: "Manuscript ID: TAES-2026-3321"
