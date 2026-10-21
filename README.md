@@ -88,8 +88,9 @@ venv\Scripts\activate
 # On Linux/macOS:
 source venv/bin/activate
 
-# 3. Install dependencies
+# 3. Install dependencies and local package
 pip install -r requirements.txt
+pip install -e .
 ```
 
 ---
@@ -120,6 +121,40 @@ DEMO PERFORMANCE SUMMARY:
 
 ---
 
+## 💻 Programmatic Python Usage
+
+You can directly import and integrate PolyPhaseNet into your own SAR processing pipeline:
+
+```python
+import torch
+from polyphasenet.model import PolyPhaseNet
+from polyphasenet.tta import episodic_safeguarded_tta
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+# 1. Initialize model with pre-computed B-Spline basis matrices
+model = PolyPhaseNet(
+    az_dim=256, rg_dim=256,
+    az_points=64, rg_points=16,
+    degree=3, mode='tensor_grid'
+).to(device)
+
+# 2. Load pre-trained checkpoint weights
+checkpoint = torch.load('checkpoints/best_polyphasenet_2d_full.pth', map_location=device)
+model.load_state_dict(checkpoint['model_state_dict'])
+model.eval()
+
+# 3. Feed-forward zero-shot autofocus
+# S_in: range-compressed slow-time signal, shape (1, 1, Azimuth, Range), complex64
+with torch.no_grad():
+    X_focused, phi_est, C_grid = model(S_in)
+
+# 4. Optional: Run Episodic Safeguarded TTA for out-of-distribution phase errors
+X_tta, phi_tta = episodic_safeguarded_tta(model, S_in, steps=6, lr=1.5e-2)
+```
+
+---
+
 ## 🔬 Reproducing Paper Experiments
 
 ### Data Preparation
@@ -138,7 +173,7 @@ All metrics in the manuscript are calculated using:
 
 ## 📖 Citation
 
-If you find this work or codebase useful in your research, please cite:
+If you find this work, pre-trained weights, or codebase useful in your research, please cite our paper (or use the metadata in [`CITATION.cff`](CITATION.cff) / [`CITATION.bib`](CITATION.bib)):
 
 ```bibtex
 @article{alver2026polyphasenet,
@@ -146,7 +181,8 @@ If you find this work or codebase useful in your research, please cite:
   title     = {Phase Gradient-Based Deep Learning for 2D Non-Separable {SAR} Autofocus},
   journal   = {IEEE Transactions on Aerospace and Electronic Systems},
   year      = {2026},
-  note      = {Under Revision, Manuscript ID: TAES-2026-3321}
+  note      = {Under Revision, Manuscript ID: TAES-2026-3321},
+  url       = {https://github.com/mburakalver/PolyPhaseNet}
 }
 ```
 
