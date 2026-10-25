@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "Physics-Informed Deep Learning for 2D Non-Separable SAR Autofocus (IEEE TAES)"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "Muhammed Burak Alver", email = "burakalver@maltepe.edu.tr"}
 ]
@@ -34,3 +34,6 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/mburakalver/PolyPhaseNet"
 Paper = "https://ieee-aess.org/publication/transactions-aerospace-and-electronic-systems"
+
+[tool.setuptools.packages.find]
+include = ["polyphasenet*"]
