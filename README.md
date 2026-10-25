@@ -2,6 +2,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch 2.0+](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
+[![CI Tests](https://github.com/mburakalver/PolyPhaseNet/actions/workflows/tests.yml/badge.svg)](https://github.com/mburakalver/PolyPhaseNet/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![IEEE TAES](https://img.shields.io/badge/IEEE%20TAES-Revision-orange.svg)](https://ieee-aess.org/publication/transactions-aerospace-and-electronic-systems)
 
@@ -134,7 +135,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # 1. Initialize model with pre-computed B-Spline basis matrices
 model = PolyPhaseNet(
-    az_dim=256, rg_dim=256,
+    patch_size=256,
     az_points=64, rg_points=16,
     degree=3, mode='tensor_grid'
 ).to(device)
@@ -155,6 +156,16 @@ X_tta, phi_tta = episodic_safeguarded_tta(model, S_in, steps=6, lr=1.5e-2)
 
 ---
 
+## 🧪 Running Unit Tests
+
+A comprehensive unit test suite is included under `tests/` covering B-Spline basis partition of unity, Cox–de Boor recursive clamping, model inference tensor shapes, global phase piston invariance, and the Episodic TTA Entropy Verification Gate:
+
+```bash
+python -m unittest discover tests
+```
+
+---
+
 ## 🔬 Reproducing Paper Experiments
 
 ### Data Preparation
@@ -168,6 +179,17 @@ All metrics in the manuscript are calculated using:
 1. **2D Sub-pixel Registration:** Aligns magnitude predictions with ground truth via cross-correlation to eliminate bulk cyclic phase translation ambiguities.
 2. **Piston-Aligned Phase MSE:** Removes the unobservable global phase offset $\mu_\Delta = \frac{1}{AR}\sum(\hat{\Phi} - \Phi)$ before computing MSE.
 3. **Contrast Metrics:** Unsupervised Shannon entropy $\mathcal{H}(\mathbf{X})$ and image sharpness $S(\mathbf{X})$.
+
+### Quantitative Benchmarking CLI
+Run `evaluate.py` to benchmark pre-trained models across severity tiers (Mild, Moderate, Severe) with or without Episodic Safeguarded TTA:
+
+```bash
+# Feed-forward zero-shot evaluation on Moderate tier
+python evaluate.py --checkpoint checkpoints/best_polyphasenet_2d_full.pth --tier moderate
+
+# Hybrid adaptive evaluation with Episodic Safeguarded TTA on Severe tier
+python evaluate.py --checkpoint checkpoints/best_polyphasenet_2d_full.pth --tier severe --use_tta --tta_steps 6
+```
 
 ---
 
